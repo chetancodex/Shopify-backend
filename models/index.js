@@ -17,4 +17,5 @@ db.sequelize = sequelize;
 db.Products = require('./productmodel')(sequelize,Sequelize);
 db.Users = require('./usermodel')(sequelize,Sequelize);
 db.Userupdate = require('./userupdatemodel')(sequelize,Sequelize);
+db.cart = require('./cartmodel')(sequelize,Sequelize);
 module.exports = db;

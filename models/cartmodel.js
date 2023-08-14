@@ -1,17 +1,19 @@
 const { Sequelize } = require('sequelize');
+const User = require('./usermodel');
+const Product = require('./productmodel');
 
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize,Sequelize) => {
     const Cart = sequelize.define("cart", {
         id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        username: {
+        uid: {
             type: Sequelize.INTEGER,
             allowNull: false,
             references: {
-                model: 'users',
+                model: User, // Use the imported User model
                 key: 'id'
             }
         },
@@ -19,16 +21,15 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: false,
             references: {
-                model: 'products', 
+                model: Product, // Use the imported Product model
                 key: 'id'
             }
         },
         quantity: {
             type: Sequelize.INTEGER,
-            allowNull: false
+            allowNull: false,
+            default : 1
         }
     });
-    Cart.belongsTo(User, { foreignKey: 'username' });
-    Cart.belongsTo(Product, { foreignKey: 'productId' });
     return Cart;
 };

@@ -1,33 +1,46 @@
 const db = require('../models/index');
 const UserUpdate = db.Userupdate;
+const jsonwebtoken = require("jsonwebtoken");
+const secretKey = "your_secret_key_here";
 
-exports.postUserUpdate = (req,res) => {
-    const username = req.params.username
-    UserUpdate.findOne({username : username }).then((user)=> {
-        console.log(user)
-        if(!user) {
-            console.log("increate")
-            user =  UserUpdate.create({
-               username : username,
-                contactNumber : req.body.contactNumber,
-                city : req.body.city,
-                street : req.body.street,
-                houseNumber : req.body.houseNumber,
-                zipcode : req.body.zipcode
+exports.username = (req, res, next) => {
+    const token = req.body.token;
+    jsonwebtoken.verify(token, secretKey);
+    let data = jsonwebtoken.decode(token, secretKey);
+    console.log(data);
+    return res.status(200).json(data);
+  };
+
+  exports.postUserUpdate = async (req, res) => {
+    const { username, contactNumber, city, street, houseNumber, zipcode } = req.body;
+
+    try {
+        // Check if the user already exists
+        let user = await UserUpdate.findOne({ where: { username: username } });
+
+        if (!user) {
+            // User doesn't exist, create a new user
+            user = await UserUpdate.create({
+                username: username,
+                contactNumber: contactNumber,
+                city: city,
+                street: street,
+                houseNumber: houseNumber,
+                zipcode: zipcode
             });
         } else {
-            console.log("in update")
-            user.contactNumber = req.body.contactNumber;
-            user.city = req.body.city;
-            user.street = req.body.street;
-            user.houseNumber = req.body.houseNumber;
-            user.zipcode = req.body.zipcode;
-            user.save()
-         
+            // User exists, update user's information
+            user.contactNumber = contactNumber;
+            user.city = city;
+            user.street = street;
+            user.houseNumber = houseNumber;
+            user.zipcode = zipcode;
+            await user.save();
         }
-        return res.status(200).send(user);
 
-    }).catch((err) => {
-        return res.status(500).send({message : err})
-    })
-}
+        return res.status(200).send(user);
+    } catch (error) {
+        return res.status(500).send({ message: "Server Error", error: error.message });
+    }
+};
+

@@ -8,7 +8,8 @@ const app = express();
 //Routes
 const productRoute = require("./routes/productroutes"); // Import the router
 const userRoute = require('./routes/userroutes');
-const userUpdateRoute = require('./routes/userUpdateroutes')
+const userUpdateRoute = require('./routes/userUpdateroutes');
+const cartRoutes = require('./routes/cartroutes');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 app.use("/products", productRoute); // Use the router with the '/products' base path
 app.use("/user", userRoute);
 app.use("/userUpdate", userUpdateRoute);
+app.use("/cart", cartRoutes);
 
 db.sequelize
   .sync()

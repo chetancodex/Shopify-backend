@@ -4,6 +4,8 @@ const Product = db.Products;
 exports.getAllProduct = async (req, res) => {
   try {
     const products = await Product.findAll();
+    console.log("PRODUCTS ALL")
+    console.log(products)
     res.status(200).json(products);
   } catch (error) {
     console.log(error);

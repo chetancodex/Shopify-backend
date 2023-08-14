@@ -24,7 +24,7 @@ exports.register = (req,res) => {
 // For Sign IN 
 exports.signIn = async(req,res) => {
 try {
-    const user = await User.findOne({email : req.body.email});
+    const user = await User.findOne({ where : {email : req.body.email} });
     if(!user || !user.comparePassword(req.body.password)) {
         return res.status(400).send({message : "Email or Password is Invalid"});
     }
