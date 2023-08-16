@@ -18,7 +18,7 @@ exports.register = (req,res) => {
         .catch((error) => {
           console.error('Error:', error);
           res.status(500).send({
-            message: 'An error occurred while creating the user.',})
+            message: 'An error occurred while creating the user.'})
          });
 };
 // For Sign IN 

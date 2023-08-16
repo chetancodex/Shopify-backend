@@ -1,5 +1,5 @@
 const db = require('../models/index');
-const cart = db.cart;
+const cart = db.usercart;
 const User = db.Users;
 const Product = db.Products
 // Get All carts
@@ -17,13 +17,17 @@ try {
 // Add Product to Cart
 exports.addProductToCart = async (req, res) => {
     try {
-        const { uid, productId, quantity } = req.body;
+        const usercartItem = {
+            username : req.body.username,
+            productId : req.body.productId,
+            quantity : req.body.quantity
+        }
         const newCartItem = await cart.create({
-            uid: uid,
-            productId: productId,
-            quantity: quantity
+            username: usercartItem.username,
+            productId: usercartItem.productId,
+            quantity: usercartItem.quantity
         });
-        res.status(201).send(newCartItem);
+        res.status(200).send(newCartItem);
     } catch (error) {
         console.log(error);
         res.status(500).send({ message: "Internal server Issue" });
