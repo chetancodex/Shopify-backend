@@ -93,3 +93,4 @@ exports.deleteOneProduct = (req, res) => {
       res.status(500).send({ message: 'Error deleting product' });
     });
 };
+// Find Product by array of Id

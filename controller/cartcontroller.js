@@ -33,3 +33,14 @@ exports.addProductToCart = async (req, res) => {
         res.status(500).send({ message: "Internal server Issue" });
     }
 };
+// Get cart by Username 
+exports.getCartByUsername = async(req,res) => {
+    try {
+        const cartItems = await cart.findAll({ where: { username : req.body.username } });
+        res.status(200).send(cartItems);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({message : "Internal Server Error "});
+    }
+}
