@@ -5,13 +5,16 @@ module.exports = (sequelize, Sequelize) => {
   const User = sequelize.define('User', {
     username: {
       type: Sequelize.STRING,
-      primarykey : true
+      primarykey : true,
+      allowNull : false
     },
     email: {
       type: Sequelize.STRING,
+      allowNull : false
     },
     hash_password: {
       type: Sequelize.STRING,
+      allowNull : false
     },
   });
 

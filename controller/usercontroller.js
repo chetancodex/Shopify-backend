@@ -41,5 +41,21 @@ try {
   return  res.status(500).send({message : "Server Not Responding", er:error})
 }
 }
+exports.delete = (req,res) => {
+ User.destroy({
+  where: { id: req.params.id }
+})
+  .then(deletedRows => {
+    if (deletedRows === 0) {
+      res.status(404).send({ message: ` User with ID ${id} not found` });
+    } else {
+      res.status(200).send({ message: `User with ID ${id} deleted successfully` });
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    res.status(500).send({ message: 'Error deleting User' });
+  });
 
+}
 
