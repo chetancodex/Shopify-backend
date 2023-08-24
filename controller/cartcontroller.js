@@ -22,10 +22,20 @@ exports.addProductToCart = async (req, res) => {
             productId : req.body.productId,
             quantity : req.body.quantity
         }
+        const product = await Product.findOne({
+            where : {id : usercartItem.productId}
+        })
+        if (!product) {
+            return res.status(404).send({ message: 'Product not found' });
+        }
         const newCartItem = await cart.create({
             username: usercartItem.username,
             productId: usercartItem.productId,
-            quantity: usercartItem.quantity
+            quantity: usercartItem.quantity,
+            name : product.name,
+            image : product.image,
+            description: product.description,
+            price : product.price
         });
         res.status(200).send(newCartItem);
     } catch (error) {

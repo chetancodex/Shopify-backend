@@ -6,10 +6,10 @@ exports.getAllProduct = async (req, res) => {
     const products = await Product.findAll();
     console.log("PRODUCTS ALL")
     console.log(products)
-    res.status(200).json(products);
+    res.status(200).send(products);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "An error occured while fetching data" });
+    res.status(500).send({ message: "An error occured while fetching data" });
   }
 };
 // Post a Product
