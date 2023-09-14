@@ -3,7 +3,7 @@ const User = require("./usermodel");
 const Product = require("./productmodel");
 
 module.exports = (sequelize, Sequelize) => {
-  const Cart = sequelize.define("productcart", {
+  const Cart = sequelize.define("usercart", {
     username: {
       type: Sequelize.STRING,
       allowNull: false,

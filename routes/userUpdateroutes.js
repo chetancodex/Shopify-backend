@@ -4,6 +4,5 @@ const router = express.Router();
 
 // user update 
 router.post('/userDetails', UserUpdateController.postUserUpdate);
-router.post('/username', UserUpdateController.username);
-
+    
 module.exports = router

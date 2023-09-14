@@ -44,16 +44,20 @@ exports.addProductToCart = async (req, res) => {
     }
 };
 // Get cart by Username 
-exports.getCartByUsername = async(req,res) => {
+exports.getCartByUsername = async (req, res) => {
     try {
-        const cartItems = await cart.findAll({ where: { username : req.body.username } });
-        res.status(200).send(cartItems);
-
+      const cartItems = await cart.findAll({
+        where: { username: req.body.username },
+        attributes: ["username", "productId", "quantity", "name", "image", "description", "price"],
+      });
+  
+      res.status(200).send(cartItems);
     } catch (error) {
-        console.log(error);
-        res.status(500).send({message : "Internal Server Error "});
+      console.log(error);
+      res.status(500).send({ message: "Internal Server Error" });
     }
-}
+  };
+  
 
 // Delete Product from Cart
 exports.deleteProductFromCart = async (req, res) => {
