@@ -58,7 +58,32 @@ exports.getCartByUsername = async (req, res) => {
     }
   };
   
-
+//IncrementSingleCartItem
+exports.incrementSingleCartItem = async(req,res) => {
+    try {
+        const username = req.body.username;
+        const productId = req.body.productId;
+        const checkUser = await cart.findOne({
+            where : { username : username }
+        });
+        if(!checkUser) {
+            return res.status(404).send({ message : 'Cart not found'})
+        };
+        const cartItem = await cart.findOne({
+            where : { username : username , productId : productId}
+        });
+        if(!cartItem) {
+            return res.status(400).send({ message : 'Product Not Found In Cart'})
+        }
+         cartItem.quantity++;
+         await cartItem.save();
+        return res.status(200).send({ message : 'Product Increment'})
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send({ message: 'Internal server error' });
+    }
+}
 // Delete Product from Cart
 exports.deleteProductFromCart = async (req, res) => {
     try {
