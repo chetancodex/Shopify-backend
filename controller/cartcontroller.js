@@ -24,7 +24,6 @@ exports.addProductToCart = async (req, res) => {
       });
   
       if (cartItem) {
-        // If the cart item already exists, increment the quantity
         cartItem.quantity++;
         await cartItem.save();
       } else {
@@ -55,9 +54,51 @@ exports.addProductToCart = async (req, res) => {
     }
   };
   
-  
+// Decrement Item 
+exports.decrementItem = async (req, res) => {
+  try {
+    const { username, productId } = req.body;
+    let cartItem = await cart.findOne({
+      where: { username: username, productId: productId },
+    });
+    const product = await Product.findOne({ where: { id: productId } });
+
+    if (!product) {
+      res.status(400).send({ message: "Product Not Found" });
+      return;
+    }
+
+    if (!cartItem) {
+      res.status(401).send({ message: "Cart Not Found" });
+      return;
+    }
+
+    if (cartItem.quantity === 0) {
+      await cart.destroy({
+        where: { username: username, productId: productId },
+      });
+      res.status(200).send({ message: "Item is deleted" });
+      return;
+    }
+
+    cartItem.quantity--;
+
+    if (cartItem.quantity === 0) {
+      await cart.destroy({
+        where: { username: username, productId: productId },
+      });
+    }
+
+    await cartItem.save();
+    res.status(200).send({ message: "Item Decremented" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Internal server issue" });
+  }
+};
+
 // Get cart by Username
-exports.getCartByUsername = async (req, res) => {
+exports.getCartByUsername = async(req, res) => {
   try {
     const cartItems = await cart.findAll({
       where: { username: req.body.username },
@@ -79,30 +120,7 @@ exports.getCartByUsername = async (req, res) => {
   }
 };
 
-//IncrementSingleCartItem
-// exports.incrementSingleCartItem = async(req,res) => {
-//     try {
-//         const username = req.body.username;
-//         const productId = req.body.productId;
-//         const checkUser = await cart.findOne({
-//             where : { username : username }
-//         });
-//         if(!checkUser) {
-//             return res.status(404).send({ message : 'Cart not found'})
-//         };
 
-//         if(!cartItem) {
-//             return res.status(400).send({ message : 'Product Not Found In Cart'})
-//         }
-//          cartItem.quantity++;
-//          await cartItem.save();
-//         return res.status(200).send({ message : 'Product Increment'})
-//     }
-//     catch (error) {
-//         console.log(error);
-//         res.status(500).send({ message: 'Internal server error' });
-//     }
-// }
 // Delete Product from Cart
 exports.deleteProductFromCart = async (req, res) => {
   try {
