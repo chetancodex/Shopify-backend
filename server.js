@@ -41,6 +41,7 @@ app.use((req, res, next) => {
           req.user = undefined;
         } else {
           req.user = decode;
+          console.log(req.user)
         }
       }
     );

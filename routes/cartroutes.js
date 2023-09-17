@@ -8,6 +8,6 @@ router.post('/create',CartController.addProductToCart);
 router.post('/getcart',CartController.getCartByUsername);
 // delete product
 router.post('/delete', CartController.deleteProductFromCart);
-router.patch('/create' , CartController.decrementItem);
+router.patch('/create' , CartController.updateCartItem);
 
 module.exports = router
