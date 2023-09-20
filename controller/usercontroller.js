@@ -36,11 +36,30 @@ try {
         },
         secretkey
     );
-    return res.status(200).send({ token });
+    res.header('Authorization', `Bearer ${token}`);
+    return res.status(200).send({ token, username: user.username });
 } catch (error) {
   return  res.status(500).send({message : "Server Not Responding", er:error})
 }
 }
+
+// function authenticateToken(req, res, next) {
+//   const token = req.headers.authorization;
+
+//   if (!token) {
+//     return res.status(401).json({ message: 'Unauthorized' });
+//   }
+
+//   try {
+//     const decoded = jwt.verify(token, secretkey);
+//     req.user = decoded; // Set user information in the request
+//     next();
+//   } catch (error) {
+//     return res.status(403).json({ message: 'Invalid token' });
+//   }
+// }
+
+
 exports.delete = (req,res) => {
  User.destroy({
   where: { id: req.params.id }
@@ -59,3 +78,4 @@ exports.delete = (req,res) => {
 
 }
 
+// module.exports = authenticateToken;

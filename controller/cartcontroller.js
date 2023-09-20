@@ -1,4 +1,5 @@
 const db = require("../models/index");
+const authMiddleware = require('../middleware/auth');
 const cart = db.usercart;
 const User = db.Users;
 const Product = db.Products;
@@ -7,7 +8,8 @@ const Product = db.Products;
 // Add Product to Cart
 exports.addProductToCart = async (req, res) => {
   try {
-    const { username, productId } = req.body;
+    const username = req.userData.username;
+    const { productId } = req.body;
 
     let cartItem = await cart.findOne({
       where: { username: username, productId: productId },
@@ -35,6 +37,7 @@ exports.addProductToCart = async (req, res) => {
         description: product.description,
         price: product.price,
       });
+      await cartItem.save()
     }
 
     res.status(200).send({ message: "Product added to cart", cartItem });
@@ -46,7 +49,8 @@ exports.addProductToCart = async (req, res) => {
 // UPdated Cart Item
 exports.updateCartItem = async (req, res) => {
   try {
-    const {username , productId, quantity } = req.body;
+    const username = req.userData.username;
+    const { productId, quantity } = req.body;
     const cartItem = await cart.findOne({
       where: { username: username, productId: productId },
     });
@@ -71,8 +75,11 @@ exports.updateCartItem = async (req, res) => {
 // Get cart by Username
 exports.getCartByUsername = async (req, res) => {
   try {
+    const username = req.userData.username 
+    
     const cartItems = await cart.findAll({
-      where: { username: req.body.username },
+
+      where: { username: username },
       attributes: [
         "username",
         "productId",
@@ -83,7 +90,7 @@ exports.getCartByUsername = async (req, res) => {
         "price",
       ],
     });
-
+     console.log(username)
     res.status(200).send(cartItems);
   } catch (error) {
     console.log(error);
@@ -94,7 +101,7 @@ exports.getCartByUsername = async (req, res) => {
 // Delete Product from Cart
 exports.deleteProductFromCart = async (req, res) => {
   try {
-    const username = req.body.username;
+    const username = req.userData.username;
     const productId = req.body.productId;
 
     // Check if the cart exists for the given username
