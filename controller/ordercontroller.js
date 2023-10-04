@@ -6,7 +6,7 @@ const authMiddleware = require('../middleware/auth');
 // Get Order
 exports.getOrders = async(req,res) => {
     try {
-        const UserOrders = await Order.findOne({where : { userId : req.userData.id }});
+        const UserOrders = await Order.findAll({where : { userId : req.userData.id }});
         res.status(200).send(UserOrders)
     } catch (error) {
         console.log(error);
