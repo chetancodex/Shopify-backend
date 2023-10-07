@@ -7,11 +7,9 @@ exports.postUserUpdate = async (req, res) => {
   const { contactNumber, city, street, houseNumber, zipcode } = req.body;
 
   try {
-    // Check if the user already exists
     let user = await UserUpdate.findOne({ where: { username: username } });
 
     if (!user) {
-      // User doesn't exist, create a new user
       user = await UserUpdate.create({
         username: username,
         contactNumber: contactNumber,
@@ -21,7 +19,6 @@ exports.postUserUpdate = async (req, res) => {
         zipcode: zipcode,
       });
     } else {
-      // User exists, update user's information
       user.contactNumber = contactNumber;
       user.city = city;
       user.street = street;
@@ -37,3 +34,15 @@ exports.postUserUpdate = async (req, res) => {
       .send({ message: "Server Error", error: error.message });
   }
 };
+exports.getUserDetails = async(req,res) => {
+  try {
+    const username = req.userData.username
+    const userDetails = await UserUpdate.findOne({ where : { username : username}});
+    if(!userDetails) {
+      res.status(201).send({ message : 'Data not Available'})
+    }
+    res.status(200).send(userDetails)
+  } catch (error) {
+    res.status(500).send({ message : 'Internal Server Error'})
+  }
+}
