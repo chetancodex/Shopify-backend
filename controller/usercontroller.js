@@ -28,15 +28,18 @@ try {
     if(!user || !user.comparePassword(req.body.password)) {
         return res.status(400).send({message : "Email or Password is Invalid"});
     }
+    const expiresIn = 3600
     const token = jwt.sign(
         {
             email : user.email,
             username: user.username,
-            id : user.id
+            id : user.id,
+            exp : Math.floor(Date.now() / 1000) + expiresIn,
         },
         secretkey
     );
     res.header('Authorization', `Bearer ${token}`);
+    console.log(Date.now())
     return res.status(200).send({ token, username: user.username });
 } catch (error) {
   return  res.status(500).send({message : "Server Not Responding", er:error})

@@ -5,15 +5,49 @@ const Order = db.Orders;
 const cart = db.usercart
 const authMiddleware = require('../middleware/auth');
 // Get Order
-exports.getOrders = async(req,res) => {
-    try {
-        const UserOrders = await Order.findAll({where : { userId : req.userData.id }});
-        res.status(200).send(UserOrders)
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({ message: "Internal server issue" });
-      }
-}
+exports.getOrders = async (req, res) => {
+  try {
+    // Step 1: Find all user orders for the given user
+    const userOrders = await Order.findAll({
+      where: { userId: req.userData.id },
+      attributes: ["productId", "quantity"],
+    });
+
+    // Extract product IDs from the user orders
+    const productIds = userOrders.map((order) => order.productId);
+
+    // Step 2: Find all products with the extracted product IDs
+    const products = await Product.findAll({
+      where: { id: productIds },
+      attributes: ["id", "name", "price"], // Include 'id' in the attributes
+    });
+
+    // Step 3: Create a mapping of product IDs to product details for easy lookup
+    const productMap = {};
+    products.forEach((product) => {
+      productMap[product.id] = {
+        name: product.name,
+        price: product.price,
+      };
+    }); 
+  
+
+    // Step 4: Generate the desired response format
+    const response = userOrders.map((order) => ({
+      productId: order.productId,
+      quantity: order.quantity,
+      name: productMap[order.productId].name,
+      price: productMap[order.productId].price,
+    }));
+
+    // Step 5: Send the response
+    res.status(200).send(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal server issue" });
+  }
+};
+
 
 // Add Order
 exports.addOrders = async (req, res) => {
