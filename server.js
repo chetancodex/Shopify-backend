@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const db = require("./models/index");
+const db = require("./config/index");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 
@@ -11,7 +11,8 @@ const productRoute = require("./routes/product.routes"); // Import the router
 const userRoute = require('./routes/user.routes');
 const userUpdateRoute = require('./routes/userUpdate.routes');
 const cartRoutes = require('./routes/cart.routes');
-const OrderRoutes = require('./routes/order.routes')
+const OrderRoutes = require('./routes/order.routes');
+const Orderdetails = require('./routes/orderdetails.routes');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -20,7 +21,8 @@ app.use("/products", productRoute); // Use the router with the '/products' base 
 app.use("/user", userRoute);
 app.use("/userUpdate", userUpdateRoute);
 app.use("/cart", cartRoutes);
-app.use('/order',OrderRoutes)
+app.use('/order',OrderRoutes);
+app.use('/orderdetail', Orderdetails)
 
 db.sequelize
   .sync()

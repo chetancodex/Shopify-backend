@@ -1,4 +1,4 @@
-const db = require("../models/index");
+const db = require("../config/index");
 const UserUpdate = db.Userupdate;
 const authMiddleware = require("../middleware/auth");
 

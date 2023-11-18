@@ -1,4 +1,4 @@
-const db = require("../models/index");
+const db = require("../config/index");
 const authMiddleware = require('../middleware/auth');
 const cart = db.usercart;
 const User = db.Users;

@@ -14,9 +14,10 @@ const db = {} ;
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.Products = require('./productmodel')(sequelize,Sequelize);
-db.Users = require('./usermodel')(sequelize,Sequelize);
-db.Userupdate = require('./userupdatemodel')(sequelize,Sequelize);
-db.usercart = require('./cartmodel')(sequelize,Sequelize);
-db.Orders = require('./ordermodel')(sequelize,Sequelize);
+db.Products = require('../models/productmodel')(sequelize,Sequelize);
+db.Users = require('../models/usermodel')(sequelize,Sequelize);
+db.Userupdate = require('../models/userupdatemodel')(sequelize,Sequelize);
+db.usercart = require('../models/cartmodel')(sequelize,Sequelize);
+db.Orders = require('../models/ordermodel')(sequelize,Sequelize);
+db.Orderdetails = require('../models/orderdetailmodel')(sequelize,Sequelize)
 module.exports = db;

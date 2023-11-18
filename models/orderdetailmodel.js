@@ -2,7 +2,7 @@ const { Sequelize } = require("sequelize");
 const User = require("./usermodel");
 const Product = require("./productmodel");
 module.exports = (sequelize, Sequelize) => {
-  const Order = sequelize.define("Order", {
+  const Orderdetails = sequelize.define("OrderDetails", {
     userId: {
       type: Sequelize.INTEGER,
       allowNull: false,
@@ -11,18 +11,14 @@ module.exports = (sequelize, Sequelize) => {
         key: "id",
       },
     },
-    quantity: {
-      type: Sequelize.INTEGER,
+    total_amt: {
+      type: Sequelize.BIGINT,
       allowNull: false,
     },
-    productId: {
+    payment_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
-      references: {
-        model: Product,
-        key: "id",
-      },
     },
   });
-  return Order;
+  return Orderdetails;
 };

@@ -1,4 +1,4 @@
-const db = require("../models/index");
+const db = require("../config/index");
 const Product = db.Products;
 // Get all products
 exports.getAllProduct = async (req, res) => {
